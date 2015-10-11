@@ -13,7 +13,7 @@ public:
 
 	//default constructor
 	dynamic_queue() {
-		cout << "constructor";
+		
 		itail = 0;
 		ihead = 0;
 		initial_capacity = 3;	//temp
@@ -81,7 +81,35 @@ public:
 		
 	};
 
-	void decreaseSize() {};
+	void decreaseSize() {		
+	
+		//cannot reduce the capacity of the array to below the intial capacity
+		if ((array_capacity / 2) < initial_capacity) {
+
+			cout << "cannot reduce capacity below intial capacity" << endl;
+			return;
+		}
+
+
+		QueueElement * newArray;
+		newArray = new QueueElement[array_capacity / 2];
+
+		for (int i = 0; i < getSize(); i++) {
+		
+			newArray[i] = myArray[i];		
+		}	
+
+		//delete any dynamically created elements of the old array
+		/*for (int i = 0; i < getSize(); i++) {
+
+		delete myArray[i];
+		}*/
+
+		//point myArray variable to the newly created array
+		myArray = newArray;
+
+		array_capacity /= 2;		
+	};
 
 
 	//returns the capacity of the dynamic array as an int
@@ -91,8 +119,9 @@ public:
 	}
 
 	void display(ostream &out) const {
+		
+		cout << endl << "The current contents of the list are: " << endl << endl;
 
-		cout << "*****" << endl;
 		int i = 0;
 		for (i = 0; i < getSize(); i++) {
 		
@@ -112,9 +141,7 @@ public:
 		if (isFull() != true) {
 
 			itail++;
-			myArray[itail - 1 % getCapacity()] = value;
-			cout << itail - 1 % getCapacity();
-			cout << myArray[itail - 1 % getCapacity()] << endl;
+			myArray[itail - 1 % getCapacity()] = value;					
 			array_size++;
 		}
 		else {
@@ -128,11 +155,14 @@ public:
 	void dequeue() {
 	
 		--ihead;
+		--array_size;
 
-		if (getSize() <= (.25 * initial_capacity)) {
+		//make sure the size of the array can never be less than 0
+		if (array_size <= 0) array_size = 0;
+
+		if (getSize() <= (.25 * array_capacity)) {
 		
-			decreaseSize();
-		
+			decreaseSize();		
 		}	
 	}
 
