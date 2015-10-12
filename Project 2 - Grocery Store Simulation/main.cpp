@@ -32,25 +32,30 @@ int main() {
 
 	queue1.dequeue();
 
-	//queue1.enqueue(5);
-	//queue1.enqueue(6);
+	queue1.enqueue(5);
+	queue1.enqueue(6);
 
-	//queue1.enqueue(9);
-	//queue1.enqueue(15);
-	//queue1.enqueue(62);
+	queue1.enqueue(9);
+	queue1.enqueue(15);
+	queue1.enqueue(62);
 
-	// queue is still having problems with the crawl
+	queue1.dequeue();
+	queue1.dequeue();
+
 
 	cout << "****" << endl;
 
 	queue1.display(cout);
 
-	//queue1.dequeue();
-	//queue1.dequeue();
-	//queue1.dequeue();
-	//queue1.dequeue();
+	queue1.dequeue();
+	queue1.dequeue();
+	queue1.dequeue();
+	queue1.dequeue();
 
-	//queue1.display(cout);
+	queue1.enqueue(9);
+	queue1.enqueue(15);
+
+	queue1.display(cout);
 	
 	cout << endl <<  "head and tail : " << endl;
 	cout << queue1.getHead() << endl;

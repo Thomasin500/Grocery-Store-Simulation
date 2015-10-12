@@ -65,6 +65,7 @@ public:
 		}
 	}
 
+
 	bool isFull() {
 	
 		if (getSize() == array_capacity) return true;
@@ -79,9 +80,11 @@ public:
 		newArray = new QueueElement[getCapacity() * 2];
 
 		//copy each element of the old array
+		int temp = ihead;
 		for (int i = 0; i < getSize(); i++) {
 
-			newArray[i] = myArray[i];
+			newArray[i] = myArray[temp];
+			temp = (temp + 1) % array_capacity;
 		}
 
 		//delete any dynamically created elements of the old array
@@ -90,8 +93,12 @@ public:
 		myArray = newArray;
 
 		array_capacity *= 2;
-		ihead = ihead % array_capacity;
-		itail = itail % array_capacity;
+		ihead = 0;
+		itail = array_size - 1;
+
+		display(cout);
+		cout << "size : " << array_size << endl;
+
 	};
 
 	void decreaseSize() {		
@@ -106,17 +113,22 @@ public:
 		QueueElement * newArray;
 		newArray = new QueueElement[array_capacity / 2];
 
+		//copy each element of the old array
+		int temp = ihead;
 		for (int i = 0; i < getSize(); i++) {
-		
-			newArray[i] = myArray[i];		
-		}	
 
+			newArray[i] = myArray[temp];
+			temp = (temp + 1) % array_capacity;
+		}
+
+		//delete any dynamically created elements of the old array
 		delete[] myArray;
-
 		//point myArray variable to the newly created array
 		myArray = newArray;
 
-		array_capacity /= 2;		
+		array_capacity /= 2;
+		ihead = 0;
+		itail = array_size - 1;
 	};
 
 
@@ -145,13 +157,22 @@ public:
 
 	void enqueue(const QueueElement &value) {
 
+		cout << endl;
 		if (isFull() != true) {
 
-			myArray[itail] = value;
-			cout << "val of itail: " << myArray[itail] << endl;
-			cout << "itail: " << itail << endl;
+			if (isEmpty() == true) {
+				
+				myArray[itail] = value;
+				cout << "val of itail: " << myArray[itail] << endl;
+				cout << "itail: " << itail << endl;			
+			}
+			else {
 
-			itail = (itail + 1) % array_capacity;
+				itail = (itail + 1) % array_capacity;
+				myArray[itail] = value;
+				cout << "val of itail: " << myArray[itail] << endl;
+				cout << "itail: " << itail << endl;				
+			}
 			
 			array_size++;
 		}
@@ -163,7 +184,7 @@ public:
 	}
 
 	void dequeue() {
-
+		cout << endl;
 		ihead = (ihead + 1) % array_capacity;
 		
 		cout << "ihead: " << ihead << endl;
