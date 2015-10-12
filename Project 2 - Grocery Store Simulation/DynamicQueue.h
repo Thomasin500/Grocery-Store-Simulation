@@ -19,7 +19,7 @@ public:
 		initial_capacity = 3;	//temp
 		array_capacity = 3;
 		myArray = new QueueElement [initial_capacity];
-		memset(myArray, 0, initial_capacity);
+		//memset(myArray, 0, initial_capacity);
 	}
 
 	//copy constructor
@@ -28,7 +28,23 @@ public:
 	//default destructor
 	~dynamic_queue() {}
 
-	QueueElement * getHead() {}
+	QueueElement getHead() {
+
+		if (array_size != 0) {
+
+			cout << endl << "ihead index: " << ihead % array_capacity << endl;
+			return myArray[ihead % array_capacity];
+		}
+	}
+
+	QueueElement getTail() {
+	
+		if (array_size != 0) {
+
+			cout << endl << "itail index: " << itail % array_capacity << endl;
+			return myArray[itail % array_capacity];
+		}
+	}
 
 	//method to return the size of the dynamic array
 	int getSize() const {
@@ -56,10 +72,11 @@ public:
 	}
 
 	//creates a new array with double the capacity of the current array and copies each element into the new array
+	//creates a new array with double the capacity of the current array and copies each element into the new array
 	void increaseSize() {
-	
+
 		QueueElement * newArray;
-		newArray = new QueueElement [getCapacity() * 2];
+		newArray = new QueueElement[getCapacity() * 2];
 
 		//copy each element of the old array
 		for (int i = 0; i < getSize(); i++) {
@@ -68,17 +85,13 @@ public:
 		}
 
 		//delete any dynamically created elements of the old array
-		/*for (int i = 0; i < getSize(); i++) {
-
-			delete myArray[i];
-		}*/
-
+		delete[] myArray;
 		//point myArray variable to the newly created array
-		myArray = newArray;	
+		myArray = newArray;
 
 		array_capacity *= 2;
-
-		
+		ihead = ihead % array_capacity;
+		itail = itail % array_capacity;
 	};
 
 	void decreaseSize() {		
@@ -90,7 +103,6 @@ public:
 			return;
 		}
 
-
 		QueueElement * newArray;
 		newArray = new QueueElement[array_capacity / 2];
 
@@ -99,11 +111,7 @@ public:
 			newArray[i] = myArray[i];		
 		}	
 
-		//delete any dynamically created elements of the old array
-		/*for (int i = 0; i < getSize(); i++) {
-
-		delete myArray[i];
-		}*/
+		delete[] myArray;
 
 		//point myArray variable to the newly created array
 		myArray = newArray;
@@ -119,20 +127,19 @@ public:
 	}
 
 	void display(ostream &out) const {
-		
+
 		cout << endl << "The current contents of the list are: " << endl << endl;
 
-		int i = 0;
-		for (i = 0; i < getSize(); i++) {
-		
-			cout << myArray[i] << endl;
-		}
+		if (array_size == 0) {
 
-		if (i == 0) {
+			cout << "Queue is empty" << endl;
+			return;
+		}
 		
-			cout << "Array is Empty" << endl;
-		
-		}	
+		for (int i = 0; i < getSize(); i++) {
+
+			cout << myArray[(i + ihead) % array_capacity] << endl;
+		}		
 	}
 
 
@@ -140,30 +147,36 @@ public:
 
 		if (isFull() != true) {
 
-			itail++;
-			myArray[itail - 1 % getCapacity()] = value;					
+			myArray[itail] = value;
+			cout << "val of itail: " << myArray[itail] << endl;
+			cout << "itail: " << itail << endl;
+
+			itail = (itail + 1) % array_capacity;
+			
 			array_size++;
 		}
 		else {
-		
+
 			increaseSize();
-			enqueue(value);		
+			enqueue(value);
 		}
 	}
 
-
 	void dequeue() {
-	
-		--ihead;
-		--array_size;
+
+		ihead = (ihead + 1) % array_capacity;
+		
+		cout << "ihead: " << ihead << endl;
+		cout << "val of ihead: " << myArray[ihead] << endl;
+		array_size--;
 
 		//make sure the size of the array can never be less than 0
 		if (array_size <= 0) array_size = 0;
 
 		if (getSize() <= (.25 * array_capacity)) {
-		
-			decreaseSize();		
-		}	
+
+			decreaseSize();
+		}
 	}
 
 
@@ -186,13 +199,36 @@ public:
 	
 	}
 
-
+	//TODO...the project says this has to be in O(1) time, this is in O(n) time because of fill()
+	//4. clear() 
+	//	Delete the existing stack array, then reset data members to initial empty state.
 	void clear() {
-	
-		
+
+		fill(myArray, myArray + getSize(), 0);
+
+		QueueElement * newArray;
+		newArray = new QueueElement[initial_capacity];
+
+		myArray = newArray;
+		array_size = 0;
+		itail = 0;
+		ihead = 0;		
 	}
 	
-	const dynamic_queue& operator=(const dynamic_queue&) {}
+	/*const dynamic_queue& operator=(const dynamic_queue &RHS) {
+	
+		if (this = RHS) return;
+
+		this->ihead = RHS->ihead;
+		this->itail = RHS->itail;
+		this->initial_capacity = RHS->initial_capacity;
+		this->array_capacity = RHS->array_capacity;
+		this->array_size = RHS->array_size;
+
+		myArray = RHS->myArray;
+
+		return this;
+	}*/
 
 
 	friend ostream& operator<< <> (ostream&, const dynamic_queue<dynamic_queue>&) {}

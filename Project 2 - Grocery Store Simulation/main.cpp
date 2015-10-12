@@ -18,28 +18,61 @@ int main() {
 
 	queue1.enqueue(1);
 	queue1.enqueue(2);
+
+	queue1.dequeue();
+
 	queue1.enqueue(3);
 	queue1.enqueue(4);
+
+	queue1.dequeue();
+	queue1.dequeue();
+
 	queue1.enqueue(5);
-	queue1.enqueue(6); // should be full
-	
-	
-	cout << queue1.getSize() << endl;
-
+	queue1.enqueue(6);
 
 	queue1.dequeue();
-	queue1.dequeue();
-	queue1.dequeue();
-	queue1.dequeue(); 
-	queue1.dequeue(); // should have to resize here
 
-	
-	cout << queue1.getSize() << endl;
-	
+	//queue1.enqueue(5);
+	//queue1.enqueue(6);
+
+	//queue1.enqueue(9);
+	//queue1.enqueue(15);
+	//queue1.enqueue(62);
+
+	// queue is still having problems with the crawl
+
+	cout << "****" << endl;
 
 	queue1.display(cout);
 
+	//queue1.dequeue();
+	//queue1.dequeue();
+	//queue1.dequeue();
+	//queue1.dequeue();
+
+	//queue1.display(cout);
 	
+	cout << endl <<  "head and tail : " << endl;
+	cout << queue1.getHead() << endl;
+	cout << queue1.getTail() << endl;
+
+
+
+	/*
+	dynamic_queue<int> queue2;
+	queue2.enqueue(9);
+	queue2.enqueue(10);
+	queue2.enqueue(11);
+
+	//queue1 = queue2;
+
+	queue1.display(cout);
+
+	queue2.enqueue(99);
+
+	queue1.display(cout);
+
+	*/
 
 	cin.ignore();
 
