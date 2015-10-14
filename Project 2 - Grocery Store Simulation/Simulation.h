@@ -10,15 +10,10 @@ using namespace std;
 #include "DynamicQueue.h"
 
 
-
-///////10/12 11:20PM
-// Wrote all the code for the simulation, but have not tested it at all
-//seems like it should work minus a few bugs
-//make sure all the calculation and tracking variables are being incremented and decremented correctly
-//the idea is that as long as there is time remaining, have each cashier either check out a customer 
-//	or reduce their service time until it is 0 (ready to check out)
-//once time runs out, service the rest of the customers and then display the results
-
+//Simulation Class
+//This class is used to run the simulation of a grocery store. It takes the input of arrivalRate, Number of Cashiers, Runtime in minutes, and Customer Service Times.
+//It will then process and check out customers for the runtime and then checkout any remaining customers in line.
+//Output will be statistics related to the simulation
 
 const int NUM_CATEGORIES = 5;
 class Simulation {
@@ -58,7 +53,7 @@ class Simulation {
 			cout << "Please enter the length of time to run the simulation in minutes: " << endl;
 			cin >> lengthOfSimulation;
 
-			cout << "Please enter the distribution of customer service times: " << endl;
+			//cout << "Please enter the distribution of customer service times: " << endl;
 			int percent = 0;
 			int	sum = 0;
 			for (int i = 0; i < NUM_CATEGORIES; i++) {
@@ -85,9 +80,7 @@ class Simulation {
 					sum += percent;
 					cout << "sum: " << sum << endl;
 				}
-			}
-			//was in the call center code...idt its needed
-			//servicePercent[NUM_CATEGORIES - 1] = 100;
+			}			
 
 			//set the countdown timer
 			myTimer.set(lengthOfSimulation);		
@@ -95,9 +88,17 @@ class Simulation {
 			//intialize random number generator
 			long seed = long(time(0)); 
 			srand(seed);
-
 		}
+		/*-----------------------------------------------------------------------
+		Constructor
 
+		Precondition:  none
+		Postcondition: Member variables have been intialized and inputs have been recorded.
+		-----------------------------------------------------------------------*/
+
+		//destructor 
+		//deletes all dynamically created elements of allCashiers[]
+		//deletes dynamically created member arrays
 		~Simulation() {
 
 			for (int i = 0; i < numCashiers - 1; i++) {
@@ -108,9 +109,14 @@ class Simulation {
 			delete [] allCashiers;
 			delete [] servicePercent;
 		}
+		/*-----------------------------------------------------------------------
+		Destructor 
 
-		//need to update the service to handle mutliple regsiters, currently only doing one
-		//serice function will not change, just handle it here
+		Precondition:  object of class Simulation
+		Postcondition: object and member variables are deleted
+		-----------------------------------------------------------------------*/
+
+		//this function is the 'brains' of the simulation. It computes and processes customers and cashiers for the runtime specified.
 		void run() {
 			
 			while (myTimer.timeRemaining() > 0) {
@@ -147,6 +153,12 @@ class Simulation {
 
 			display(cout);
 		}
+		/*-----------------------------------------------------------------------
+		Run
+
+		Precondition:  none
+		Postcondition: The simulation has ran and displayed the results
+		-----------------------------------------------------------------------*/
 
 		//function is passed the remaining service time of the customer in the front of the line
 		// as well as the cashier the customer is in line for 
@@ -180,7 +192,15 @@ class Simulation {
 				}
 			}			
 		}
+		/*-----------------------------------------------------------------------
+		Service
 
+		Precondition:  Reference to service time of head element of queue 'cashier' (index within allcashiers)
+		Postcondition: If a customer is ready to check out its statistics are recorded and it is dequeued from the queue.
+						iF the customer still needs servicing time it will decrement its service time and return;
+		-----------------------------------------------------------------------*/
+
+		//This function checks for and adds customers to the smallest line of a cashier
 		void checkForNewCustomer() {
 
 			//activates new customer procedure for each arrival per minute. Case1: arrivalRate > 1
@@ -260,6 +280,12 @@ class Simulation {
 				}			
 			}
 		}
+		/*-----------------------------------------------------------------------
+		checkForNewCustomer
+
+		Precondition:  none
+		Postcondition: If a customer has arrived (determined by arrivalRate input) it will join the smallest line of a cashier
+		-----------------------------------------------------------------------*/
 
 		//Displays the average customer service and wait time as well as the average cashier idle time
 		void display(ostream &out) {
@@ -280,6 +306,12 @@ class Simulation {
 			cout << "\nThe average customer waiting time was: " << avgCustomerWaitingTime << " minutes";
 			cout << "\nThe average cashier idle time was: " << avgCashierIdleTime << " minutes";
 		}
+		/*-----------------------------------------------------------------------
+		Copy Constructor
+
+		Precondition:  none
+		Postcondition: Statistics of the simulation are outputted
+		-----------------------------------------------------------------------*/
 
 
 	private:

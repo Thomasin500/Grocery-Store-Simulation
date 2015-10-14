@@ -5,8 +5,7 @@
 //	Data Structures Project 2 - Grocery Store Simulation
 ///////////////////////////////////
 
-//TODO still need to add all the comments to all the files
-//pre/postcondistions, etc....
+
 
 #include "Timer.h"
 #include "Customer.h"
@@ -18,7 +17,7 @@ using namespace std;
 
 int main() {
 
-
+	//run the simulation
 	Simulation sim;
 	sim.run();
 
