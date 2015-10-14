@@ -38,6 +38,7 @@ class Simulation {
 			totalNumberOfCustomers = 0;
 			customersRemaining = 0;
 
+			servicePercent = new int[NUM_CATEGORIES];
 			allCashiers =  new dynamic_queue<Customer>[numCashiers];
 			
 
@@ -50,7 +51,7 @@ class Simulation {
 
 			//create the correct number of cashiers
 			for(int i = 0; i < numCashiers; i++) {
-
+				
 				allCashiers[i] = *new dynamic_queue<Customer>;
 			}
 
@@ -62,11 +63,13 @@ class Simulation {
 			int	sum = 0;
 			for (int i = 0; i < NUM_CATEGORIES; i++) {
 
-				cout << " <= " << (i + 1) << " min. ";	
-				cin >> percent;
-				servicePercent[i] = percent;
-				sum += percent;
-				cout << "sum: " << sum << endl;
+				//cout << " <= " << (i + 1) << " min. ";	
+				//cin >> percent;
+				//servicePercent[i] = percent;
+				//sum += percent;
+				//cout << "sum: " << sum << endl;
+				servicePercent[i] = 20 + sum;
+				sum += 20;
 			}
 
 			//check to make sure the inputs add up to 100
@@ -102,7 +105,8 @@ class Simulation {
 				delete &allCashiers[i];
 			}
 
-			delete allCashiers;
+			delete [] allCashiers;
+			delete [] servicePercent;
 		}
 
 		//need to update the service to handle mutliple regsiters, currently only doing one
@@ -179,33 +183,29 @@ class Simulation {
 
 		void checkForNewCustomer() {
 
-			//random number between 0 and 99
-			int x = rand() % 100;
-
-			//TODO what if the arrival rate is less than 1 a minute?
-			// ?? does it skip it cause x is less than the formula below so thats the less than 1 a minute?
-			if (x < 100 * arrivalRate) {
+			//activates new customer procedure for each arrival per minute. Case1: arrivalRate > 1
+			for (int i = 0; i < arrivalRate; i++) {
 
 				//a new customer is ready to get in line, create random service time
-				int r = rand() % 100;				
+				int r = rand() % 100;
 				int serviceTime = 0;
 				int culmServiceTime = servicePercent[serviceTime];
-				
+
 				while (r > culmServiceTime) {
-					
+
 					culmServiceTime += servicePercent[serviceTime];
-					serviceTime++; 
+					serviceTime++;
 				}
-				
+
 				totalServiceTime += serviceTime + 1;
 
 				//create a new customer and add it to the smallest line at a cashier
-				Customer  newCust(myTimer, serviceTime + 1);
+				Customer newCust(myTimer, serviceTime + 1);
 				totalNumberOfCustomers++;
 				customersRemaining++;
 
 				int min = 9999999;
-				int smallestLine;
+				int smallestLine = 0;
 				for (int i = 0; i < numCashiers; i++) {
 
 					if (allCashiers[i].getSize() < min) {
@@ -214,8 +214,50 @@ class Simulation {
 						smallestLine = i;
 					}
 				}
-				
+
 				allCashiers[smallestLine].enqueue(newCust);
+				
+			}
+
+			if (arrivalRate < 1) { //Case 2: arrivalRate < 1
+				
+				//random number between 0 and 99
+				int x = rand() % 100;
+
+				//calculates the probability that a customer has arrived
+				if (x < 100 * arrivalRate) {
+
+					//a new customer is ready to get in line, create random service time
+					int r = rand() % 100;
+					int serviceTime = 0;
+					int culmServiceTime = servicePercent[serviceTime];
+
+					while (r > culmServiceTime) {
+
+						culmServiceTime += servicePercent[serviceTime];
+						serviceTime++;
+					}
+
+					totalServiceTime += serviceTime + 1;
+
+					//create a new customer and add it to the smallest line at a cashier
+					Customer  newCust(myTimer, serviceTime + 1);
+					totalNumberOfCustomers++;
+					customersRemaining++;
+
+					int min = 9999999;
+					int smallestLine = 0;
+					for (int i = 0; i < numCashiers; i++) {
+
+						if (allCashiers[i].getSize() < min) {
+
+							min = allCashiers[i].getSize();
+							smallestLine = i;
+						}
+					}
+
+					allCashiers[smallestLine].enqueue(newCust);
+				}			
 			}
 		}
 
@@ -245,7 +287,7 @@ class Simulation {
 		//inputs
 		int lengthOfSimulation;
 		double arrivalRate;
-		int servicePercent[NUM_CATEGORIES];
+		int * servicePercent;
 
 		//tracking variables
 		int totalServiceTime;

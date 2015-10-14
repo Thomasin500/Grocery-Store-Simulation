@@ -12,7 +12,7 @@ class Customer {
 
 		Customer(){
 		
-			timeOfArrival = serviceTime = 888;
+			timeOfArrival = serviceTime = 0;
 		}
 
 		Customer(const Timer &T, int serviceTime) {
@@ -22,6 +22,13 @@ class Customer {
 
 			//set the service time
 			this->serviceTime = serviceTime;
+		}
+
+		Customer(const Customer &copyCust) {
+
+			timeOfArrival = copyCust.timeOfArrival;
+			serviceTime = copyCust.serviceTime;
+
 		}
 
 		int getArrivalTime() {
@@ -50,6 +57,16 @@ class Customer {
 			out << "Arrival Time:	" << timeOfArrival << endl;
 			out << "Service Time:	" << serviceTime << endl;
 		}	
+
+		const Customer& operator=(const Customer &RHS) {
+
+			if (this == &RHS) return *this;
+
+			timeOfArrival = RHS.timeOfArrival;
+			serviceTime = RHS.serviceTime;
+
+			return *this;
+		}
 
 private: 
 		int timeOfArrival;

@@ -39,11 +39,9 @@ class dynamic_queue {
 		}
 
 		//default destructor
-		//TODO if any of the array elements are created dynamically on the heap then each
-		//element needs to be explicitly deleted
 		~dynamic_queue() {
 
-			for (int i = 0; i < array_capacity - 1; i++) {
+			for (int i = 0; i < array_capacity; i++) {
 			
 				delete &myArray[i];
 			}
@@ -113,10 +111,10 @@ class dynamic_queue {
 
 				newArray[i] = myArray[temp];
 				temp = (temp + 1) % array_capacity;
-			}
+			}			
 
-			//delete any dynamically created elements of the old array
-			delete[] myArray;
+			//program works with the delete commented out as well as only inutting arrival rate < #registers
+			//delete[] myArray;
 
 			//point myArray variable to the newly created array
 			myArray = newArray;
@@ -149,8 +147,8 @@ class dynamic_queue {
 				temp = (temp + 1) % array_capacity;
 			}
 
-			//delete any dynamically created elements of the old array
-			delete[] myArray;
+			//program works with the delete commented out as well as only inutting arrival rate < #registers
+			//delete[] myArray;
 
 			//point myArray variable to the newly created array
 			myArray = newArray;
@@ -268,7 +266,7 @@ class dynamic_queue {
 	
 		const dynamic_queue& operator=(const dynamic_queue &RHS) {
 	
-			if (myArray == RHS.myArray) return *this;
+			if (this->myArray == RHS.myArray) return *this;
 
 			array_capacity = RHS.array_capacity;
 			array_size = RHS.array_size;
