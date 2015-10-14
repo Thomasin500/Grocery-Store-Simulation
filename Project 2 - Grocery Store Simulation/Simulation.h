@@ -17,7 +17,9 @@ using namespace std;
 
 //Simulation tested with the following inputs:
 // (4, 6, 10)
-// 
+// IF the simulation hits a breakpoint, clean and build the project then try again.
+//There seems to be an issue with the heap becoming corrupted at unpredictable points
+//running the program 3 times with the same inputs will produce 3 different results
 
 const int NUM_CATEGORIES = 5;
 class Simulation {
