@@ -119,8 +119,8 @@ class Customer {
 
 			if (this == &RHS) return *this;
 
-			timeOfArrival = RHS.timeOfArrival;
-			serviceTime = RHS.serviceTime;
+			this->timeOfArrival = RHS.timeOfArrival;
+			this->serviceTime = RHS.serviceTime;
 
 			return *this;
 		}

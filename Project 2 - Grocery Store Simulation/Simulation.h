@@ -15,6 +15,10 @@ using namespace std;
 //It will then process and check out customers for the runtime and then checkout any remaining customers in line.
 //Output will be statistics related to the simulation
 
+//Simulation tested with the following inputs:
+// (4, 6, 10)
+// 
+
 const int NUM_CATEGORIES = 5;
 class Simulation {
 
@@ -289,6 +293,8 @@ class Simulation {
 
 		//Displays the average customer service and wait time as well as the average cashier idle time
 		void display(ostream &out) {
+
+			//cout << totalNumberOfCustomers;
 
 			cout << "\n\ntotal number of customers :" << totalNumberOfCustomers << endl;
 

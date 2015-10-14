@@ -201,6 +201,9 @@ class dynamic_queue {
 				int temp = ihead;
 				for (int i = 0; i < getSize(); i++) {
 
+					cout << "size of current array: " <<  getSize() << endl;
+					cout << "i" << i << endl;
+
 					newArray[i] = myArray[temp];
 					temp = (temp + 1) % array_capacity;
 				}
